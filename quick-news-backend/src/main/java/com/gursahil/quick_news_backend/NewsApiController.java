@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,20 @@ public class NewsApiController {
             newsTitles.add(newsList.get(i).getTitle());
         }
         return newsTitles;
+    }
+
+    @GetMapping("title/{i}")
+    public String getTitle(@PathVariable int i) {
+        NewsApiResponse newsApiResponse = newsApiService.getNews();
+        ArrayList<NewsApiResponse.Latest> newsList = newsApiResponse.getLatest();
+        return newsList.get(i).getTitle();
+    }
+
+    @GetMapping("summary/{i}")
+    public String getSummary(@PathVariable int i) {
+        NewsApiResponse newsApiResponse = newsApiService.getNews();
+        ArrayList<NewsApiResponse.Latest> newsList = newsApiResponse.getLatest();
+        return newsList.get(i).getSummary();
     }
 
 }

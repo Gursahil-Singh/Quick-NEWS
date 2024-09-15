@@ -6,12 +6,14 @@ export default function SummarizedNews(props) {
   const{func,dataKey} = props
   const[title,setTitle] = useState("")
   const[summary,setSummary] = useState("")
-  const[link,setLink] = useState("")
+  const[url,setUrl] = useState("")
   const[popup,setPopup] = useState(false)
   const[saved,setSaved] = useState(false)
+  const[saveLink,setSaveLink] = useState(false)
 
   function saveArticle(){
     setSaved(true)
+    if(!saveLink){setSaveLink(true)}
   }
   function showPopup(){
     setPopup(!popup)
@@ -21,6 +23,20 @@ export default function SummarizedNews(props) {
     setSaved(false)
   }
 
+  useEffect(() => {
+    const sendData = async () =>{
+      if(saveLink){
+        const aiResponse = await axios.get(`http://localhost:8080/ai/title/${title}/summary/${summary}`);
+        const articleObj = {
+          article:aiResponse.data,
+          link:url
+        }
+        await axios.post('http://localhost:8080/database/article', articleObj)
+      }
+    };
+    sendData();
+  },[saveLink])
+
   useEffect(()=>{
     const fetchData = async () => {
       try{
@@ -29,7 +45,7 @@ export default function SummarizedNews(props) {
         const summaryResponse = await axios.get(`http://localhost:8080/api/summary/${dataKey}`);
         setSummary(summaryResponse.data);
         const linkResponse = await axios.get(`http://localhost:8080/api/link/${dataKey}`);
-        setLink(linkResponse.data);
+        setUrl(linkResponse.data);
       } catch(error){
         console.log('Error fetching data: ',error);
       }
@@ -62,7 +78,7 @@ export default function SummarizedNews(props) {
     {(popup) && <div className= 'h-screen -mt-12 gap-6 p-4 flex flex-col items-center justify-center'>
         <div className='border-2 border-black border-solid h-auto w-3/4 bg-slate-400 rounded-xl shadow-lg shadow-sky-700'>
           {(!saved) && <div className='sm:text-lg underline flex justify-center items-center md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wide p-2'>
-            <a href={link} target="_blank" >{link}</a>
+            <a href={url} target="_blank" >{url}</a>
           </div>}
           {(saved) && <div className='sm:text-lg flex justify-center items-center md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wide p-2'>
             Article is saved

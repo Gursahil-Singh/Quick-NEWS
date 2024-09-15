@@ -42,4 +42,11 @@ public class NewsApiController {
         return newsList.get(i).getSummary();
     }
 
+    @GetMapping("link/{i}")
+    public String getLink(@PathVariable int i) {
+        NewsApiResponse newsApiResponse = newsApiService.getNews();
+        ArrayList<NewsApiResponse.Latest> newsList = newsApiResponse.getLatest();
+        return newsList.get(i).getNewsLink();
+    }
+
 }

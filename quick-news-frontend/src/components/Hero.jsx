@@ -12,6 +12,12 @@ export default function Hero() {
   const [summaryState, setSummaryState] = useState(false)
   const [savedArticlesState,setSavedArticlesState] = useState(false)
   const [prevPage,setPrevPage] = useState("")
+  const [dataKey,setDataKey] = useState(0)
+
+  function setSummaryKey(dataKey){
+    setDataKey(dataKey)
+    showSummary()
+  }
 
   function showSummary(){
     setNewsState(!newsState)
@@ -53,8 +59,8 @@ export default function Hero() {
         {fetchNewsState && <div className='h-screen -mt-12 flex justify-center items-center'>
             <FetchNews onLoad={showNews} />
         </div>}
-        {newsState && <News func={showSummary} />}
-        {summaryState &&<SummarizedNews func={showSummary} />}  
+        {newsState && <News func={setSummaryKey} />}
+        {summaryState &&<SummarizedNews func={showSummary} dataKey={dataKey} />}  
         {savedArticlesState && <SavedArticles />}
     </div>
   )

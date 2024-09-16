@@ -19,6 +19,12 @@ export default function SavedArticles() {
     fetchData();
   }, []);
 
+  const handleArticleDelete = (articleId) => {
+    setData((prevArticles) =>
+      prevArticles.filter((article) => article.id !== articleId)
+    );
+  };
+
 
   return (
     <div className='h-screen flex mx-12 justify-center items-center -mt-12 pt-12 text-xs md:text-base lg:text-xl xl:text-xl'>
@@ -32,7 +38,7 @@ export default function SavedArticles() {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <Article key={index} article={item.article} link={item.link} />
+            <Article onDelete={handleArticleDelete} key={index} article={item.article} link={item.link} id={item.id} />
           ))}
         </tbody>
       </table>

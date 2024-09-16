@@ -25,13 +25,18 @@ export default function SummarizedNews(props) {
 
   useEffect(() => {
     const sendData = async () =>{
-      if(saveLink){
-        const aiResponse = await axios.get(`http://localhost:8080/ai/title/${title}/summary/${summary}`);
-        const articleObj = {
-          article:aiResponse.data,
-          link:url
+      if(saveLink){ 
+        try {
+          const aiResponse = await axios.get(`http://localhost:8080/ai/title/${title}/summary/${summary}`);
+          const articleObj = {
+            article:aiResponse.data,
+            link:url
+          }
+          await axios.post('http://localhost:8080/database/article', articleObj)
+        } 
+        catch (error) {
+          console.error('Error fetching data:', error);
         }
-        await axios.post('http://localhost:8080/database/article', articleObj)
       }
     };
     sendData();

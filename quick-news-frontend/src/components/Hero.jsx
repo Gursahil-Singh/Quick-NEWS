@@ -45,7 +45,6 @@ export default function Hero() {
       }
     }
     else if(savedArticlesState){
-      console.log("close")
       if(prevPage==="fetchNews"){setFetchNewsState(true)}
       else if(prevPage==="news"){setNewsState(true)}
       else if(prevPage==="summary"){setSummaryState(true)}

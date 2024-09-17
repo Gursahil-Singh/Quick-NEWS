@@ -1,4 +1,4 @@
-package com.gursahil.quick_news_backend;
+package com.gursahil.quick_news_backend.news;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.gursahil.quick_news_backend;
+package com.gursahil.quick_news_backend.article;
 
 import java.util.List;
 

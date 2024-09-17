@@ -1,4 +1,4 @@
-package com.gursahil.quick_news_backend;
+package com.gursahil.quick_news_backend.news;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

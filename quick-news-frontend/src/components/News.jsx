@@ -6,7 +6,7 @@ import axios from 'axios'
 export default function News(props) {
     const{func} = props
 
-    const [strings, SetStrings] = useState([]);
+    const [strings, setStrings] = useState([]);
     const[loadingState,setLoadingState] = useState(true)
 
     function hideLoading(){
@@ -17,10 +17,13 @@ export default function News(props) {
       const fetchData = async () => {
         try{
           const response = await axios.get('http://localhost:8080/api/titles');
-          SetStrings(response.data);
+          const data = response.data;
+          const newStrings = data.slice(2);
+          setStrings(newStrings);
         } catch(error){
           console.log('Error fetching data: ',error);
         }
+        
         hideLoading();
       }
       fetchData();

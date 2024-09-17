@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button'
 import axios from 'axios'
+import Loading from './Loading'
+import Link from './Link'
+import Summary from './Summary'
 
 export default function SummarizedNews(props) {
   const{func,dataKey} = props
@@ -10,6 +13,11 @@ export default function SummarizedNews(props) {
   const[popup,setPopup] = useState(false)
   const[saved,setSaved] = useState(false)
   const[saveLink,setSaveLink] = useState(false)
+  const[loadingState,setLoadingState] = useState(true)
+
+  function hideLoading(){
+    setLoadingState(false)
+  }
 
   function saveArticle(){
     setSaved(true)
@@ -54,47 +62,20 @@ export default function SummarizedNews(props) {
       } catch(error){
         console.log('Error fetching data: ',error);
       }
+      hideLoading();
     };
     fetchData();
   },[]);
 
   return (
     <>
-      {(!popup) && <div className= 'h-screen -mt-12 gap-6 p-4 flex flex-col items-center justify-center'>
-        <div className='border-2 border-black border-solid h-auto w-3/4 bg-slate-400 rounded-xl shadow-lg shadow-sky-700'>
-          <div className='border border-solid bg-slate-950 text-white rounded-xl p-4 sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold tracking-wide'>
-            {title}
-          </div>
-          <div className='sm:text-lg md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wide p-2'>
-            {summary}
-          </div>
-          <div className='flex justify-between p-4'>
-            <button onClick={()=>{showPopup(); saveArticle()}} className='text-xs font-semibold border-2 border-solid rounded-full bg-white text-slate-950 shadow-md shadow-black'>
-              Save Article
-            </button>
-            <button onClick={showPopup} className='text-xs font-semibold border-2 border-solid rounded-full bg-white text-slate-950 shadow-md shadow-black'>
-              Read Article
-            </button>
-          </div>
-        </div>
+      {loadingState && <Loading /> }
+
+      {(!loadingState) && (!popup) && <div className= 'h-screen -mt-12 gap-6 p-4 flex flex-col items-center justify-center'>
+        <Summary title={title} summary={summary} saveArticle={saveArticle} showPopup={showPopup} />
         <Button onClick={func} label="Close" />
-    </div>}
-    
-    {(popup) && <div className= 'h-screen -mt-12 gap-6 p-4 flex flex-col items-center justify-center'>
-        <div className='border-2 border-black border-solid h-auto w-3/4 bg-slate-400 rounded-xl shadow-lg shadow-sky-700'>
-          {(!saved) && <div className='sm:text-lg underline flex justify-center items-center md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wide p-2'>
-            <a href={url} target="_blank" >{url}</a>
-          </div>}
-          {(saved) && <div className='sm:text-lg flex justify-center items-center md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wide p-2'>
-            Article is saved
-          </div>}
-          <div className='flex justify-center items-center p-4'>
-            <button onClick={back} className='text-xs font-semibold border-2 border-solid rounded-full bg-white text-slate-950 shadow-md shadow-black'>
-              Back
-            </button>
-          </div>
-        </div>
-    </div>}
+      </div>}
+      {(!loadingState) && (popup) && <Link saved={saved} url={url} back={back} />}
     
     </>
   )
